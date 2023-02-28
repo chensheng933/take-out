@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.reggie.mapper.DishFlavorMapper">
+
+    <insert id="batchSave">
+        insert into dish_flavor values
+        <!--
+            遍历list的话collection的值为collection或者list
+            也可以在java代码中通过@Param注解起别名,起了别名就用别名
+         -->
+        <foreach collection="list" item="f" separator=",">
+            (null,#{f.dishId},#{f.name},#{f.value},#{f.createTime},#{f.updateTime},#{f.createUser},#{f.updateUser},0)
+        </foreach>
+    </insert>
+</mapper>

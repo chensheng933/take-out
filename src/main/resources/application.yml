@@ -1,0 +1,79 @@
+server:
+  port: 8080
+spring:
+  application:
+    #应用名称 , 可选
+    name: reggie_take_out
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: 1234
+  servlet:
+    multipart:
+#     单个文件大小的限制
+      max-file-size: 100MB
+#     一次请求的大小限制
+      max-request-size: 100MB
+  redis:
+    host: 192.168.56.99
+    port: 6379
+    database: 0
+    lettuce:
+      pool:
+        max-active: 10
+        min-idle: 2
+        max-wait: 1s
+  shardingsphere:
+    datasource:
+      #给数据源起名字,名字随意,后面要用到
+      names:
+        master,slave1
+      # 主数据源,对应同级names中的值
+      master:
+        type: com.zaxxer.hikari.HikariDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        jdbcUrl: jdbc:mysql://192.168.56.99:3306/reggie?characterEncoding=utf-8&useSSL=false
+        username: root
+        password: 1234
+      # 从数据源,对应同级names中的值
+      slave1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        jdbcUrl: jdbc:mysql://192.168.56.100:3306/reggie?characterEncoding=utf-8&useSSL=false
+        username: root
+        password: 1234
+    masterslave:
+      # 配置主从名称
+      name: rw
+      # 主库数据源名称,对应datasource中某个数据源的配置
+      master-data-source-name: master
+      # 从库数据源名称列表，多个逗号分隔
+      slave-data-source-names: slave1
+      # 配置多个从服务器的负载均衡算法.random和round_robin(轮询)
+      load-balance-algorithm-type: round_robin
+    props:
+    #开启SQL显示，默认false
+      sql:
+        show: true
+  main:
+    allow-bean-definition-overriding: true
+mybatis:
+  configuration:
+    #开启下划线与驼峰映射
+    map-underscore-to-camel-case: true
+    # 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+#    root: error
+    com.itheima: info
+pagehelper:
+#  自动识别数据库方言
+  auto-dialect: true
+#  合理化分页
+  reasonable: true
+# 指定文件上传的目录
+reggie:
+  path: /usr/local/img/
+

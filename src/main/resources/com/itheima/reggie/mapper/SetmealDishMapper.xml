@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.reggie.mapper.SetmealDishMapper">
+
+    <insert id="batchSave">
+        insert into setmeal_dish values
+        <foreach collection="list" item="sd" separator=",">
+            (null,#{sd.setmealId},#{sd.dishId},#{sd.name},#{sd.price},#{sd.copies},#{sd.sort},#{sd.createTime},#{sd.updateTime},#{sd.createUser},#{sd.updateUser},0)
+        </foreach>
+    </insert>
+    <delete id="batchDeleteBySetmealIds">
+        delete from setmeal_dish where setmeal_id in
+        <!--若数组没有起别名就是用array,若起别名就使用别名-->
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
